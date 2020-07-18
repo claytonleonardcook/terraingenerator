@@ -16,7 +16,7 @@ class Chunk {
                 let globalX = x + (this.x * this.size),
                     globalZ = z + (this.z * this.size);
 
-                this.geometry.vertices.push(new THREE.Vector3((x * this.scale) + chunkX, noise.simplex2(globalX / 50, globalZ / 50) * 2, (z * this.scale) + chunkZ));
+                this.geometry.vertices.push(new THREE.Vector3((x * this.scale) + chunkX, (noise.simplex2(globalX / 100, globalZ / 100) % (noise.simplex2(globalX / 90, globalZ / 90))), (z * this.scale) + chunkZ));
             }
         }
     }
@@ -87,8 +87,8 @@ class ChunkLoader {
     }
 
     loadChunks(playerX, playerZ) {
-        let currentChunkX = Math.floor(playerX/this.chunkSize),
-            currentChunkZ = Math.floor(playerZ/this.chunkSize);
+        let currentChunkX = Math.ceil(playerX/(this.chunkSize*this.chunkScale)),
+            currentChunkZ = Math.ceil(playerZ/(this.chunkSize*this.chunkScale));
 
         for (let x = currentChunkX - this.renderDistance; x < currentChunkX + this.renderDistance; x++) {
             for (let z = currentChunkZ - this.renderDistance; z < currentChunkZ + this.renderDistance; z++) {
@@ -125,6 +125,6 @@ class ChunkLoader {
     }
 
     debug(playerX,playerZ) {
-        console.log(Math.floor(playerX/this.chunkSize),Math.floor(playerZ/this.chunkSize), " ~ ", Math.floor(playerX), Math.floor(playerZ))
+        console.log(Math.ceil(playerX/(this.chunkSize*this.chunkScale)),Math.ceil(playerZ/(this.chunkSize*this.chunkScale)), " ~ ", Math.ceil(playerX), Math.ceil(playerZ))
     }
 }

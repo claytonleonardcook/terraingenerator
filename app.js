@@ -1,7 +1,7 @@
 var scene = new THREE.Scene();
 
 const renderer = new THREE.WebGLRenderer();
-const cl = new ChunkLoader(4, 10, 1);
+const cl = new ChunkLoader(2, 50, 0.05);
 noise.seed(Math.random());
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
