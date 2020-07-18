@@ -16,7 +16,7 @@ class Chunk {
                 let globalX = x + (this.x * this.size),
                     globalZ = z + (this.z * this.size);
 
-                this.geometry.vertices.push(new THREE.Vector3((x * this.scale) + chunkX, noise.simplex2(globalX / 100, globalZ / 100) * 0.5, (z * this.scale) + chunkZ));
+                this.geometry.vertices.push(new THREE.Vector3((x * this.scale) + chunkX, noise.simplex2(globalX / 50, globalZ / 50) * 2, (z * this.scale) + chunkZ));
             }
         }
     }
@@ -87,19 +87,20 @@ class ChunkLoader {
     }
 
     loadChunks(playerX, playerZ) {
-        playerX = Math.floor(playerX);
-        playerZ = Math.floor(playerZ);
-        for (let x = playerX - this.renderDistance; x < playerX + this.renderDistance; x++) {
-            for (let z = playerZ - this.renderDistance; z < playerZ + this.renderDistance; z++) {
-                if (!(this.chunkExists(new Chunk(this.chunkSize, this.chunkScale, Math.ceil(x/(this.chunkSize*this.chunkScale)), Math.ceil(z/(this.chunkSize*this.chunkScale)))))) {
-                    this.chunks.push(new Chunk(this.chunkSize, this.chunkScale, Math.ceil(x/(this.chunkSize*this.chunkScale)), Math.ceil(z/(this.chunkSize*this.chunkScale))));
+        let currentChunkX = Math.floor(playerX/this.chunkSize),
+            currentChunkZ = Math.floor(playerZ/this.chunkSize);
+
+        for (let x = currentChunkX - this.renderDistance; x < currentChunkX + this.renderDistance; x++) {
+            for (let z = currentChunkZ - this.renderDistance; z < currentChunkZ + this.renderDistance; z++) {
+                if (!(this.chunkExists(new Chunk(this.chunkSize, this.chunkScale, x, z)))) {
+                    this.chunks.push(new Chunk(this.chunkSize, this.chunkScale, x, z));
                 }
             }
         }
     }
 
     cleanChunks(playerX, playerZ) {
-        while(this.chunks.length > this.renderDistance*this.renderDistance) {
+        while(this.chunks.length > (this.renderDistance*this.renderDistance)*6) {
             this.chunks.splice(0,1);
             scene.children.splice(0,1);
         }
@@ -121,5 +122,9 @@ class ChunkLoader {
                 scene.add(mesh);
             }
         });
+    }
+
+    debug(playerX,playerZ) {
+        console.log(Math.floor(playerX/this.chunkSize),Math.floor(playerZ/this.chunkSize), " ~ ", Math.floor(playerX), Math.floor(playerZ))
     }
 }

@@ -16,8 +16,8 @@ class Player {
         this.zVel = 0;
         this.thetaVel = 0;
 
-        this.forwardSpeed = 0.025;
-        this.elivationSpeed = 0.005;
+        this.forwardSpeed = 0.1;
+        this.elivationSpeed = 0.05;
         this.rotationalSpeed = 0.05;
 
         window.addEventListener('keypress', (e) => {
